@@ -1,4 +1,4 @@
-package me.haowen.soulplanet.adapter;
+package me.haowen.sample.adapter;
 
 import android.content.Context;
 import android.view.View;
@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import java.io.UnsupportedEncodingException;
 import java.util.Random;
 
+import me.haowen.soulplanet.adapter.PlanetAdapter;
 import me.haowen.soulplanet.utils.SizeUtils;
 import me.haowen.soulplanet.view.PlanetView;
 

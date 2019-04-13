@@ -1,13 +1,13 @@
-package me.haowen.soulplanet;
+package me.haowen.sample;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-
-import me.haowen.soulplanet.adapter.TestAdapter;
+import me.haowen.sample.adapter.TestAdapter;
 import me.haowen.soulplanet.view.SoulPlanetsView;
 
 public class MainActivity extends AppCompatActivity {

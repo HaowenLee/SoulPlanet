@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="me.haowen.soulplanet">
+    package="me.haowen.sample">
 
     <application
         android:allowBackup="false"
@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".MainActivity">
+        <activity android:name="me.haowen.sample.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

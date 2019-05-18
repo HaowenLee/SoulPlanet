@@ -7,7 +7,9 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Handler;
 import android.os.Looper;
+
 import androidx.annotation.IntDef;
+
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -40,9 +42,15 @@ public class SoulPlanetsView extends ViewGroup implements Runnable, PlanetAdapte
     private float mAngleY;
     private float centerX, centerY;
     private float radius;
+    /**
+     * 半径的百分比
+     */
     private float radiusPercent = 0.9f;
     private float[] darkColor = new float[]{1.0f, 0.0f, 0.0f, 1.0f};
     private float[] lightColor = new float[]{0.9412f, 0.7686f, 0.2f, 1.0f};
+    /**
+     * 是否支持手动滑动
+     */
     private boolean manualScroll;
     private MarginLayoutParams layoutParams;
     private int minSize;
@@ -133,8 +141,10 @@ public class SoulPlanetsView extends ViewGroup implements Runnable, PlanetAdapte
         this.post(new Runnable() {
             @Override
             public void run() {
+                // 中心坐标
                 centerX = (getRight() - getLeft()) / 2f;
                 centerY = (getBottom() - getTop()) / 2f;
+                // 半径
                 radius = Math.min(centerX, centerY) * radiusPercent;
                 mPlanetCalculator.setRadius((int) radius);
 
@@ -149,6 +159,7 @@ public class SoulPlanetsView extends ViewGroup implements Runnable, PlanetAdapte
                     View view = planetAdapter.getView(getContext(), i, SoulPlanetsView.this);
                     planetModel.setView(view);
                     mPlanetCalculator.add(planetModel);
+                    // 点击事件监听
                     addListener(view, i);
                 }
                 mPlanetCalculator.create(true);
@@ -203,10 +214,20 @@ public class SoulPlanetsView extends ViewGroup implements Runnable, PlanetAdapte
         return this.mode;
     }
 
+    /**
+     * 设置滚动模式
+     *
+     * @param mode 滚动模式
+     */
     public void setAutoScrollMode(@Mode int mode) {
         this.mode = mode;
     }
 
+    /**
+     * 谁知适配器
+     *
+     * @param adapter 适配器
+     */
     public final void setAdapter(PlanetAdapter adapter) {
         planetAdapter = adapter;
         planetAdapter.setOnDataSetChangeListener(this);
@@ -264,7 +285,11 @@ public class SoulPlanetsView extends ViewGroup implements Runnable, PlanetAdapte
         measureChildren(MeasureSpec.UNSPECIFIED, MeasureSpec.UNSPECIFIED);
     }
 
+    /**
+     * 处理触摸事件
+     */
     private boolean handleTouchEvent(MotionEvent event) {
+        // 触摸点个数
         int pointerCount = event.getPointerCount();
         if (pointerCount > 1) {
             multiplePointer = true;
@@ -280,6 +305,7 @@ public class SoulPlanetsView extends ViewGroup implements Runnable, PlanetAdapte
                 break;
             case MotionEvent.ACTION_POINTER_DOWN:
                 if (event.getActionIndex() == 1) {
+                    // 第二个触摸点
                     scaleX = getScaleX();
                     startDistance = distance(event.getX(0) - event.getX(1),
                             event.getY(0) - event.getY(1));
@@ -288,7 +314,7 @@ public class SoulPlanetsView extends ViewGroup implements Runnable, PlanetAdapte
                 break;
             case MotionEvent.ACTION_MOVE:
                 if (pointerCount == 1 && !multiplePointer) {
-                    //rotate elements depending on how far the selection point is from center of cloud
+                    // 单点触摸，旋转星球
                     float dx = event.getX() - downX;
                     float dy = event.getY() - downY;
                     if (isValidMove(dx, dy)) {
@@ -300,8 +326,10 @@ public class SoulPlanetsView extends ViewGroup implements Runnable, PlanetAdapte
                     }
                     return isValidMove(downX - startX, downY - startY);
                 } else if (pointerCount == 2) {
+                    // 双点触摸，缩放
                     float endDistance = distance(event.getX(0) - event.getX(1),
                             event.getY(0) - event.getY(1));
+                    // 缩放比例
                     float scale = ((endDistance - startDistance) / (endDistance * 2) + 1) * scaleX;
                     if (scale > 1.4f) {
                         scale = 1.2f;
@@ -352,6 +380,7 @@ public class SoulPlanetsView extends ViewGroup implements Runnable, PlanetAdapte
      * 更新视图
      */
     private void processTouch() {
+        // 设置旋转的X,Y
         if (mPlanetCalculator != null) {
             mPlanetCalculator.setAngleX(mAngleX);
             mPlanetCalculator.setAngleY(mAngleY);
@@ -360,8 +389,10 @@ public class SoulPlanetsView extends ViewGroup implements Runnable, PlanetAdapte
         for (int i = 0; i < getChildCount(); i++) {
             PlanetModel planetModel = mPlanetCalculator.get(i);
             View child = planetModel.getView();
+            // 更新每一个ChildView
             if (child != null && child.getVisibility() != GONE) {
                 planetAdapter.onThemeColorChanged(child, planetModel.getColor());
+                // 缩放小于1的设置不可点击
                 if (planetModel.getScale() < 1.0f) {
                     child.setScaleX(planetModel.getScale());
                     child.setScaleY(planetModel.getScale());
@@ -369,14 +400,16 @@ public class SoulPlanetsView extends ViewGroup implements Runnable, PlanetAdapte
                 } else {
                     child.setClickable(true);
                 }
+                // 设置透明度
                 child.setAlpha(planetModel.getScale());
                 int left = (int) (centerX + planetModel.getLoc2DX()) - child.getMeasuredWidth() / 2;
                 int top = (int) (centerY + planetModel.getLoc2DY()) - child.getMeasuredHeight() / 2;
-                // 从View的Tag里取出位置之前的位置信息
+                // 从View的Tag里取出位置之前的位置信息，平移新旧位置差值
                 int[] originLocation = (int[]) child.getTag();
                 if (originLocation != null && originLocation.length > 0) {
                     child.setTranslationX((float) (left - originLocation[0]));
                     child.setTranslationY((float) (top - originLocation[1]));
+                    // 小于移动速度，刷新
                     if (Math.abs(mAngleX) <= speed && Math.abs(mAngleY) <= speed) {
                         child.invalidate();
                     }
@@ -413,21 +446,27 @@ public class SoulPlanetsView extends ViewGroup implements Runnable, PlanetAdapte
             PlanetModel planetModel = mPlanetCalculator.get(i);
             if (child != null && child.getVisibility() != GONE) {
                 planetAdapter.onThemeColorChanged(child, planetModel.getColor());
+                // 设置缩放
                 if (planetModel.getScale() < 1f) {
                     child.setScaleX(planetModel.getScale());
                     child.setScaleY(planetModel.getScale());
                 }
+                // 设置透明度
                 child.setAlpha(planetModel.getScale());
-                int left, top;
-                left = (int) (centerX + planetModel.getLoc2DX()) - child.getMeasuredWidth() / 2;
-                top = (int) (centerY + planetModel.getLoc2DY()) - child.getMeasuredHeight() / 2;
+                // 设置位置
+                int left = (int) (centerX + planetModel.getLoc2DX()) - child.getMeasuredWidth() / 2;
+                int top = (int) (centerY + planetModel.getLoc2DY()) - child.getMeasuredHeight() / 2;
 
                 child.layout(left, top, left + child.getMeasuredWidth(), top + child.getMeasuredHeight());
+                // 设置位置信息的TAG
                 child.setTag(new int[]{left, top});
             }
         }
     }
 
+    /**
+     * 设置标签点击事件监听
+     */
     public void setOnTagClickListener(OnTagClickListener listener) {
         onTagClickListener = listener;
     }
@@ -443,7 +482,9 @@ public class SoulPlanetsView extends ViewGroup implements Runnable, PlanetAdapte
 
     @Override
     public void run() {
+        // 非用户触摸状态，和非不可滚动状态
         if (!isOnTouch && mode != MODE_DISABLE) {
+            // 减速模式（均速衰减）
             if (mode == MODE_DECELERATE) {
                 if (Math.abs(mAngleX) > 0.2f) {
                     mAngleX -= mAngleX * 0.1f;
@@ -455,6 +496,7 @@ public class SoulPlanetsView extends ViewGroup implements Runnable, PlanetAdapte
             processTouch();
         }
         handler.removeCallbacksAndMessages(null);
-        handler.postDelayed(this, 15);
+        // 延时
+        handler.postDelayed(this, 30);
     }
 }

@@ -181,24 +181,28 @@ public class PlanetView extends View {
         super.onDraw(canvas);
         float radius = starRadius;
         float min = Math.min(scale * 0.5f, 1.0f);
-        int color = (int) (0xff * min);
+        // 透明度
+        int alpha = (int) (0xff * min);
+        // 半径
         radius *= min;
-        signPaint.setARGB(color, 238, 238, 238);
+        // 设置昵称颜色
+        signPaint.setARGB(alpha, 238, 238, 238);
+        // 昵称文字过长（跑马灯）
         if (isOverstep) {
             canvas.drawText(sign, totalSignWidth - signDistanceX, signY, signPaint);
         } else {
             canvas.drawText(sign, signX, signY, signPaint);
         }
-        int alpha = color << 24;
-        color = starColor | alpha;
-        starPaint.setColor(color);
+        // 星星球颜色（透明度）
+        starPaint.setColor(starColor | alpha << 24);
+        // 是否有阴影
         if (hasShadow) {
-            starPaint.setShadowLayer(shadowRadius, 1.0f, 1.0f, color);
+            starPaint.setShadowLayer(shadowRadius, 1.0f, 1.0f, alpha);
             canvas.drawCircle(starCenterX, starCenterY, radius, starPaint);
             canvas.drawCircle(starCenterX, starCenterY, radius, starPaint);
         }
         canvas.drawCircle(starCenterX, starCenterY, radius, starPaint);
-        matchPaint.setColor(alpha | matchColor);
+        matchPaint.setColor(alpha << 24 | matchColor);
         canvas.drawText(matchPercent, matchPercentX, matchPercentY, matchPaint);
         canvas.drawText(matchDescribe, matchDescribeX, matchDescribeY, matchPaint);
         if (hasShadow || isOverstep) {

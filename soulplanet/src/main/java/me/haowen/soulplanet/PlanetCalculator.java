@@ -277,6 +277,11 @@ public class PlanetCalculator {
         planetModel.setLocZ((int) (radius * Math.cos(phi)));
     }
 
+    /**
+     * 设置半径
+     *
+     * @param radius 半径
+     */
     public void setRadius(int radius) {
         this.radius = radius;
     }

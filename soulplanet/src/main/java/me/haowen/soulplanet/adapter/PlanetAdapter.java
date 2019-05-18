@@ -9,12 +9,15 @@ import android.view.ViewGroup;
  */
 public abstract class PlanetAdapter {
 
+    /**
+     * 数据改变监听
+     */
     private OnDataSetChangeListener onDataSetChangeListener;
 
     /**
-     * 个数
+     * 星球（标签）个数
      *
-     * @return 个数
+     * @return 星球（标签）个数
      */
     public abstract int getCount();
 
@@ -56,6 +59,9 @@ public abstract class PlanetAdapter {
      * 数据更新
      */
     public final void notifyDataSetChanged() {
+        if (onDataSetChangeListener == null) {
+            return;
+        }
         onDataSetChangeListener.onChange();
     }
 
@@ -73,7 +79,7 @@ public abstract class PlanetAdapter {
      */
     public interface OnDataSetChangeListener {
         /**
-         * 改变
+         * 数据改变
          */
         void onChange();
     }

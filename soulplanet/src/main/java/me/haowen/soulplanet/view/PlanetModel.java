@@ -8,6 +8,9 @@ import android.view.View;
  */
 public class PlanetModel {
 
+    /**
+     * 默认权重
+     */
     private static final int DEFAULT_POPULARITY = 5;
     /**
      * 权重
@@ -99,7 +102,7 @@ public class PlanetModel {
 
     public void setScale(float scale) {
         this.scale = scale;
-        if(this.mView != null) {
+        if (this.mView != null) {
             ((PlanetView) this.mView).setScale(scale);
         }
     }

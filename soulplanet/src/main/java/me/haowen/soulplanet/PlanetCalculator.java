@@ -197,8 +197,8 @@ public class PlanetCalculator {
             int diameter = 2 * radius;
             float per = diameter / (diameter + rz3);
             // 让我们为标签设置位置、比例和透明度
-            planetModel.setLoc2DX((int) (rx3 * per));
-            planetModel.setLoc2DY((int) (ry3 * per));
+            planetModel.setLoc2DX(rx3);
+            planetModel.setLoc2DY(ry3);
             planetModel.setScale(per);
 
             // 计算透明度

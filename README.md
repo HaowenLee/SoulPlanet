@@ -8,4 +8,4 @@ Soul App星球效果
 
 ### 参考
 
-[3dTagCloudAndroid](https://github.com/misakuo/3dTagCloudAndroid)
+[misakuo/3dTagCloudAndroid](https://github.com/misakuo/3dTagCloudAndroid)

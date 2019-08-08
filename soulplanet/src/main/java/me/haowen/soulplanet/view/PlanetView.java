@@ -194,10 +194,11 @@ public class PlanetView extends View {
             canvas.drawText(sign, signX, signY, signPaint);
         }
         // 星星球颜色（透明度）
-        starPaint.setColor(starColor | alpha << 24);
+        int color = starColor | alpha << 24;
+        starPaint.setColor(color);
         // 是否有阴影
         if (hasShadow) {
-            starPaint.setShadowLayer(shadowRadius, 1.0f, 1.0f, alpha);
+            starPaint.setShadowLayer(shadowRadius, 1.0f, 1.0f, color);
             canvas.drawCircle(starCenterX, starCenterY, radius, starPaint);
             canvas.drawCircle(starCenterX, starCenterY, radius, starPaint);
         }
@@ -207,7 +208,7 @@ public class PlanetView extends View {
         canvas.drawText(matchDescribe, matchDescribeX, matchDescribeY, matchPaint);
         if (hasShadow || isOverstep) {
             if (isOverstep) {
-                signDistanceX = signDistanceX + 2.5f;
+                signDistanceX = signDistanceX + 0.5f;
                 if (signDistanceX > maxSignRange) {
                     signDistanceX = signWidth;
                 }

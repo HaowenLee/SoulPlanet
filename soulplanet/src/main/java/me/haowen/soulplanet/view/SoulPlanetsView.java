@@ -30,6 +30,8 @@ import me.haowen.soulplanet.adapter.PlanetAdapter;
  */
 public class SoulPlanetsView extends ViewGroup implements Runnable, PlanetAdapter.OnDataSetChangeListener {
 
+    public static final float MAX_SCALE = 1.3f;
+    public static final float MINI_SCALE = 1f;
     public static final int MODE_DISABLE = 0;
     public static final int MODE_DECELERATE = 1;
     public static final int MODE_UNIFORM = 2;
@@ -331,11 +333,11 @@ public class SoulPlanetsView extends ViewGroup implements Runnable, PlanetAdapte
                             event.getY(0) - event.getY(1));
                     // 缩放比例
                     float scale = ((endDistance - startDistance) / (endDistance * 2) + 1) * scaleX;
-                    if (scale > 1.4f) {
-                        scale = 1.2f;
+                    if (scale > MAX_SCALE) {
+                        scale = MAX_SCALE;
                     }
-                    if (scale < 1) {
-                        scale = 1f;
+                    if (scale < MINI_SCALE) {
+                        scale = MINI_SCALE;
                     }
                     setScaleX(scale);
                     setScaleY(scale);
@@ -471,15 +473,6 @@ public class SoulPlanetsView extends ViewGroup implements Runnable, PlanetAdapte
         onTagClickListener = listener;
     }
 
-    @IntDef({MODE_DISABLE, MODE_DECELERATE, MODE_UNIFORM})
-    @Retention(RetentionPolicy.SOURCE)
-    public @interface Mode {
-    }
-
-    public interface OnTagClickListener {
-        void onItemClick(ViewGroup parent, View view, int position);
-    }
-
     @Override
     public void run() {
         // 非用户触摸状态，和非不可滚动状态
@@ -498,5 +491,32 @@ public class SoulPlanetsView extends ViewGroup implements Runnable, PlanetAdapte
         handler.removeCallbacksAndMessages(null);
         // 延时
         handler.postDelayed(this, 30);
+    }
+
+    /**
+     * 滚动模式
+     * <p>
+     * {@link #MODE_DISABLE} 不让滚动
+     * {@link #MODE_DECELERATE} 减速模式
+     * {@link #MODE_UNIFORM} 匀速模式
+     */
+    @IntDef({MODE_DISABLE, MODE_DECELERATE, MODE_UNIFORM})
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface Mode {
+    }
+
+    /**
+     * TAG的点击事件
+     */
+    public interface OnTagClickListener {
+
+        /**
+         * TAG点击
+         *
+         * @param parent   parent
+         * @param view     view
+         * @param position position
+         */
+        void onItemClick(ViewGroup parent, View view, int position);
     }
 }

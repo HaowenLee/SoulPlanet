@@ -38,6 +38,7 @@ public class TestAdapter extends PlanetAdapter {
             starColor = PlanetView.COLOR_MOST_NEW;
         } else if (position % 18 == 0) {
             hasShadow = true;
+            str = "最闪耀";
         } else {
             str = "描述";
         }
@@ -93,7 +94,7 @@ public class TestAdapter extends PlanetAdapter {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        return str;
+        return "\uD83D\uDE00";
     }
 
     @Override

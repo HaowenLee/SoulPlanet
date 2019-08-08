@@ -134,7 +134,7 @@ public class PlanetCalculator {
         int count = planetModelCloud.size();
         for (int i = 1; i < count + 1; i++) {
             if (isEvenly) {
-                // 平均θ --> 得到各点的θ值
+                // 平均（三维直角得Z轴等分[-1,1]） θ范围[-π/2,π/2])
                 phi = Math.acos(-1.0 + (2.0 * i - 1.0) / count);
                 theta = Math.sqrt(count * Math.PI) * phi;
             } else {
@@ -153,9 +153,9 @@ public class PlanetCalculator {
      * <p>
      * 1度=π/180
      *
-     * @param mAngleX x方向角度
-     * @param mAngleY y方向角度
-     * @param mAngleZ z方向角度
+     * @param mAngleX x方向旋转距离
+     * @param mAngleY y方向旋转距离
+     * @param mAngleZ z方向旋转距离
      */
     private void sineCosine(float mAngleX, float mAngleY, float mAngleZ) {
         double degToRad = (Math.PI / 180);

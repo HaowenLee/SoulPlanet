@@ -94,7 +94,7 @@ public class TestAdapter extends PlanetAdapter {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        return "\uD83D\uDE00";
+        return str;
     }
 
     @Override

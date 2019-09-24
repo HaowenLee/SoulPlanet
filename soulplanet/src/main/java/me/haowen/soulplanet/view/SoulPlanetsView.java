@@ -176,7 +176,7 @@ public class SoulPlanetsView extends ViewGroup implements Runnable, PlanetAdapte
 
     @Override
     public void onChange() {
-        post(this);
+        initFromAdapter();
     }
 
     private void addListener(View view, final int position) {

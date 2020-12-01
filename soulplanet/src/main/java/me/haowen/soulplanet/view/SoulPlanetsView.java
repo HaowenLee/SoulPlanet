@@ -403,7 +403,7 @@ public class SoulPlanetsView extends ViewGroup implements Runnable, PlanetAdapte
                     child.setClickable(true);
                 }
                 // 设置透明度
-                child.setAlpha(planetModel.getScale());
+                child.setAlpha(planetModel.getAlpha());
                 int left = (int) (centerX + planetModel.getLoc2DX()) - child.getMeasuredWidth() / 2;
                 int top = (int) (centerY + planetModel.getLoc2DY()) - child.getMeasuredHeight() / 2;
                 // 从View的Tag里取出位置之前的位置信息，平移新旧位置差值
